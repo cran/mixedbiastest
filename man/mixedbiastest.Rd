@@ -55,7 +55,7 @@ example_model <- lmer(y ~ x + (1| group), data = example_data)
 result2 <- mixedbiastest(example_model)
 print(result2)
 plot(result2)
-}
+
 
 #Simulate data
 set.seed(123)
@@ -74,7 +74,7 @@ data_sim <- data.frame(y = y, x = x, group = factor(group))
 model3 <- lmer(y ~ x + (1 | group), data = data_sim)
 result3 <- mixedbiastest(model3, verbose = TRUE)
 plot(result3)
-
+}
 }
 \references{
 Karl, A. T., & Zimmerman, D. L. (2021). A diagnostic for bias in linear mixed model estimators induced by dependence between the random effects and the corresponding model matrix. \emph{Journal of Statistical Planning and Inference}, \emph{212}, 70–80. \doi{10.1016/j.jspi.2020.06.004}

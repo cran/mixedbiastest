@@ -9,7 +9,6 @@
 #' @importFrom ggplot2 ggplot geom_histogram geom_vline facet_wrap labs theme_minimal geom_text aes
 #' @importFrom stats rnorm
 #' @importFrom rlang .data
-
 #' @export
 plot.mixedbiastest <- function(x, ...) {
   permutation_values_list <- x$permutation_values
@@ -26,47 +25,40 @@ plot.mixedbiastest <- function(x, ...) {
 
     # Check if all permutation values are the same
     if (length(unique(permutation_values)) == 1) {
-      # Add a small jitter to allow plotting
-      permutation_values_jittered <- permutation_values + rnorm(length(permutation_values), 0, 1e-16)
       # Indicate that permutation values are constant
       annotations <- rbind(annotations, data.frame(
         Fixed_Effect = fe_name,
         label = "No variation in permutation values"
       ))
+      permutation_values_current <- permutation_values
     } else {
-      permutation_values_jittered <- permutation_values
+      permutation_values_current <- permutation_values
     }
 
     df <- data.frame(
-      PermutationValues = permutation_values_jittered,
+      PermutationValues = permutation_values_current,
       Fixed_Effect = fe_name,
       Observed_Value = observed_value
     )
     df_list[[fe_name]] <- df
   }
+
   combined_df <- do.call(rbind, df_list)
 
-  # Adjust the data for plotting
+  # Adjust the factor levels
   combined_df$Fixed_Effect <- factor(combined_df$Fixed_Effect, levels = k_list_names)
   annotations$Fixed_Effect <- factor(annotations$Fixed_Effect, levels = k_list_names)
 
+
+
   # Plot using facets
   p <- ggplot(combined_df, aes(x = .data$PermutationValues)) +
-    geom_histogram(
-      binwidth = function(x) {
-        if (length(unique(x)) <= 1) {
-          return(1)  # Arbitrary binwidth when data has no variance
-        } else {
-          return((max(x) - min(x)) / 30)
-        }
-      },
-      fill = "lightblue", color = "black", na.rm = TRUE
-    ) +
+    geom_histogram( fill = "lightblue", color = "black", na.rm = TRUE) +
     geom_vline(aes(xintercept = .data$Observed_Value), color = "red",
                linetype = "dashed", linewidth = 1) +
     facet_wrap(~ Fixed_Effect, scales = "free") +
     labs(title = "Bias Diagnostic for Fixed Effects",
-         x = expression(hat(nu) %*% hat(b)),
+         x = expression(hat(nu) %*% hat(eta)),
          y = "Frequency") +
     theme_minimal()
 
@@ -85,9 +77,11 @@ plot.mixedbiastest <- function(x, ...) {
       vjust = -1,
       inherit.aes = FALSE
     )
-
   }
 
   # Suppress warnings and print the plot
   suppressWarnings(print(p))
+
+  # Optionally return the plot if desired
+  # return(p)
 }

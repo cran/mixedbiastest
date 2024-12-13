@@ -25,11 +25,11 @@
 #'   fixed_effects <- list_fixed_effects(mixed_model)
 #'   print(fixed_effects)
 #'
-#'   # Suppose we want to test the contrast: lincomep - lcarpvap
+#'   # Suppose we want to test the contrast: lincomep - lcarpcap
 #'   p <- nrow(fixed_effects)
 #'   k <- rep(0, p)
 #'   k[fixed_effects$Index[fixed_effects$Coefficient == "lincomep"]] <- 1
-#'   k[fixed_effects$Index[fixed_effects$Coefficient == "lcarpvap"]] <- -1
+#'   k[fixed_effects$Index[fixed_effects$Coefficient == "lcarpcap"]] <- -1
 #'
 #'   # Run the bias test with the custom contrast
 #'   result <- mixedbiastest(mixed_model, k_list = list(k))

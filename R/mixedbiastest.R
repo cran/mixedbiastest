@@ -44,7 +44,7 @@
 #' result2 <- mixedbiastest(example_model)
 #' print(result2)
 #' plot(result2)
-#' }
+#'
 #'
 #' #Simulate data
 #' set.seed(123)
@@ -68,7 +68,7 @@
 # Perform the bias diagnostic with verbose output
 #' result3 <- mixedbiastest(model3, verbose = TRUE)
 #' plot(result3)
-#'
+#'}
 #' @importFrom lme4 getME fixef VarCorr
 #' @importFrom stats sigma
 #' @import Matrix
